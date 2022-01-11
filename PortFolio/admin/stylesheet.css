@@ -1,0 +1,241 @@
+body {
+	background-color: #171515;
+	color: #00682a;
+}
+@font-face {
+    font-family: 'yanone_kaffeesatzbold';
+ 
+src: url('../../yanonekaffeesatz-bold-webfont.eot');
+
+src: url('../../yanonekaffeesatz-bold-webfont.eot?#iefix') format('embedded-opentype'),
+url('../../fonts/yanone/yanonekaffeesatz-bold-webfont.woff2') format('woff2'),
+url('../../fonts/yanone/yanonekaffeesatz-bold-webfont.woff') format('woff'),
+url('../../fonts/yanone/yanonekaffeesatz-bold-webfont.ttf') format('truetype'),
+url('../../fonts/yanone/yanonekaffeesatz-bold-webfont.svg#yanone_kaffeesatzbold') format('svg');
+
+    font-weight: normal;
+
+    font-style: normal;
+
+}
+
+
+
+
+
+
+@font-face {
+    font-family: 'yanone_kaffeesatzlight';
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-light-webfont.eot');
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-light-webfont.eot?#iefix') format('embedded-opentype'),
+url('../../fonts/yanone/yanonekaffeesatz-light-webfont.woff2') format('woff2'),
+url('../../fonts/yanone/yanonekaffeesatz-light-webfont.woff') format('woff'),
+url('../../fonts/yanone/yanonekaffeesatz-light-webfont.ttf') format('truetype'),
+url('../../fonts/yanone/yanonekaffeesatz-light-webfont.svg#yanone_kaffeesatzlight') format('svg');
+
+    font-weight: normal;
+
+    font-style: normal;
+
+}
+
+
+
+
+
+
+@font-face {
+    font-family: 'yanone_kaffeesatz_regularRg';
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.eot');
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.eot?#iefix') format('embedded-opentype'),
+url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.woff2') format('woff2'),
+url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.woff') format('woff'),
+url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.ttf') format('truetype'),
+url('../../fonts/yanone/yanonekaffeesatz-regular-webfont.svg#yanone_kaffeesatz_regularRg') format('svg');
+
+    font-weight: normal;
+
+    font-style: normal;
+
+}
+
+
+
+
+
+
+@font-face {
+    font-family: 'yanone_kaffeesatzthin';
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.eot');
+
+    src: url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.eot?#iefix') format('embedded-opentype'),
+url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.woff2') format('woff2'),
+url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.woff') format('woff'),
+url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.ttf') format('truetype'),
+url('../../fonts/yanone/yanonekaffeesatz-thin-webfont.svg#yanone_kaffeesatzthin') format('svg');
+
+    font-weight: normal;
+
+    font-style: normal;
+
+}
+.titre {
+	font-family: yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 45px;
+	color: #ACACAC;
+}
+.petittitre {
+	font-family: yanone_kaffeesatzbold, sans-serif;
+	font-size: 100px;
+	color: #D97900;
+	line-height:50px;
+}
+.petittitre2 {
+	font-family: yanone_kaffeesatzbold, sans-serif;
+	font-size: 50px;
+	color: #D97900;
+	line-height:50px;
+}
+.petittitre3 {
+	font-family: yanone_kaffeesatzbold, sans-serif;
+	font-size: 24px;
+	color: #D97900;
+	line-height:24px;
+}
+
+.soustitre {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:30px;
+color:#FFFFFF;
+}
+.soustitrenoir {
+	font-family: yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 30px;
+	color: #000000;
+	text-align: center;
+}
+.soustitrerouge {
+	font-family: yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 30px;
+	color: #AB0002;
+	text-align: center;
+}
+.textes {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:58px;
+color:#FFFFFF;
+}
+.textes2 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:18px;
+color:#FFFFFF;
+}
+.textes3 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:14px;
+color:#FFFFFF;
+}
+.NoCmd {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:34px;
+color:#FFFFFF;
+}
+.textesNoirs {
+font-family:yanone_kaffeesatzbold, sans-serif;
+font-size:24px;
+color:#000000;
+}
+.colonne1 {
+ position:absolute;
+ top:20;
+ right:0;
+ width:830px;
+	}
+.colonne2 {
+ position:absolute;
+ top:20;
+ left:835px;
+ width:830px;
+	}
+.columns {
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  columns: 2;
+  columns-height:900px ;  
+  height: 900 px ;
+ 
+}
+a.blanc {
+	font-family:yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 16px;
+	color: #FFFFFF;
+}
+a.blanc2 {
+	font-family:yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 30px;
+	color: #FFFFFF;
+}
+a.blanc3 {
+	font-family:yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 22px;
+	color: #FFFFFF;
+}
+a.blanc4 {
+	font-family:yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 22px;
+	color: #FFFFFF;
+    text-decoration:none;
+}
+.Planning {
+ border-width:1px;
+ border-style:solid;
+ border-color:#FFFFFF;
+border-collapse:collapse	
+ }
+.PlanningGris {
+ border-width:1px;
+ border-style:solid;
+ border-color:#434343;
+border-collapse:collapse	
+ }
+.TextPlanNoir1 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:18px;
+color:#000000;
+}
+.TextPlanBlanc {
+	font-family: yanone_kaffeesatz_regularRg, sans-serif;
+	font-size: 18px;
+	color: #FFFFFF;
+	text-align: center;
+}
+.TextPlanBlanc1 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:24px;
+color:#FFFFFF;
+}
+.TextPlanNoir2 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:24px;
+color:#000000;
+}
+.TextPlanNoirTitre {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:30px;
+color:#000000;
+}
+.TextPlanGris {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:14px;
+color:#AAAAAA;
+}
+.TextPlanBlanc2 {
+font-family:yanone_kaffeesatz_regularRg, sans-serif;
+font-size:18px;
+color:#FFFFFF;
+}
