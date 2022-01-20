@@ -1,4 +1,5 @@
 <?php
+
 // SCRIPT POUR INSERSION DANS LES PAGES DU SITE
 if (isset($_POST['recherche'])) //si on a validé le formulaire
 {
@@ -10,7 +11,7 @@ $mode = mysqli_real_escape_string(htmlspecialchars($_POST['mode']));
 if ($mode == "tous_les_mots")
 {
 $and_ou_or = 'AND'; //on utilisera AND dans la boucle
-$mots = explode(" ", $recherche); //séparation des mots
+$mots = explode(" ", $recherche); //séparation des motss
 $nombre_mots = count ($mots); //comptage du nombre de mots
 $valeur_requete1 = ''; //Une requete pour chaque champ ou on veut faire une recherche
 $valeur_requete2 = '';

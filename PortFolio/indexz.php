@@ -7,7 +7,7 @@ $base='IntranetBE';	//Nom de la base de données
 $con = mysqli_connect('localhost', 'root', '') or die(mysqli_error($con)); 
 mysqli_select_db($con, 'intranetBE');
 
-ini_set( 'default_charset', 'ISO-8859-1' );	
+ini_set( 'default_charset', "UTF-8" );
 
 /////////////////////////////////////////////////////////////////
 //CONTROLE AVANT CHARGEMENT DES PAGES 
@@ -36,13 +36,13 @@ $NomFichier = $data2['nomfichier'];
 }
 
 if (strtotime($DateValid) < (strtotime($now)) AND (!empty(strtotime($DateValid)))){
-mysqli_query($con, "UPDATE documents SET etat ='depass' WHERE id ='$ID'");
+mysqli_query($con, "UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'");
 }
 if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now)) OR (empty(strtotime($DateValid)))){
-mysqli_query($con, "UPDATE documents SET etat ='on' WHERE id ='$ID'"); 
+mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'"); 
 } 
 if ( (empty($NomFichier)) OR (strtotime($Date)) > (strtotime($now)) ){
-mysqli_query($con, "UPDATE documents SET etat ='wait' WHERE id ='$ID'"); 
+mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'"); 
 } 
 }
 ////////////////////////////////////////////////////////////////////////////	
@@ -61,8 +61,8 @@ $Date = $_POST['dateproduction'];
 $DateValid = $_POST['dateperemption'];		
 $NomFichier = $_POST['nomfichier'];
 $Version = $_POST['version'];
-$Type = $_POST['type'];
-$Service = $_POST['service'];
+$Type = $_POST['typedoc'];
+$Service = $_POST['servicedoc'];
 $Titre =  $_POST['titre'];	
 $Destinataires = $_POST['destinataires'];
 	
@@ -102,14 +102,14 @@ setTimeout('redirection("pfattente.php")',0);
       <table width="65%" border="0" cellpadding="8" cellspacing="0">
         <tbody>
           <tr>
-            <td height="60" align="center" valign="middle" bgcolor="#0E0D0D"><a href="index.php?ajouter"class="soustitre"><img src="plus.png" alt="" width="45" height="44"/><br>Ajout de document</a><br>
+            <td height="60" align="center" valign="middle" bgcolor="#0E0D0D"><a href="indexz.php?ajouter"class="soustitre"><img src="plus.png" alt="" width="45" height="44"/><br>Ajout de document</a><br>
  <?php // On affiche la fen&ecirc;tre ajouter actualite
 if (isset($_GET['ajouter'])) // Si on demande d ajouter une news 
 { ?>
                     <br><form action="../admin/index.php" method="post" enctype="multipart/form-data" name="formulaire" id="formulaire">
                       <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" class="fondtransp1">
                         <tr>
-                          <td height="25" colspan="4" align="center" bgcolor="#8C8C8C"><select name="NomPosteur" id="NomPosteur">
+                          <td height="25" colspan="4" align="center" bgcolor="#8C8C8C"><select name="posteur" id="posteur">
 <option selected="selected">Je suis...</option>
 <option value="Myriam CARRE">Myriam CARRE</option>
 <option value="Bernard CLEMENCE">Bernard CLEMENCE</option>
@@ -120,12 +120,12 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                              <input name="Titre" type="text" id="Titre" value="Titre" size="60" maxlength="90" />
+                              <input name="titre" type="text" id="titre" value="titre" size="60" maxlength="90" />
                           </div></td>
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                            <select name="Type" id="Type">
+                            <select name="type" id="typedoc">
                             <option selected="selected">Type de document</option>
                             <option value="Procedure">Procedure</option>
                             <option value="Charte">Charte</option>
@@ -135,7 +135,7 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                            <select name="Service" id="Service">
+                            <select name="Service" id="service">
                             <option selected="selected">Service</option>
                             <option value="ADV">ADV</option>
                             <option value="Marketing">Marketing</option>
@@ -154,9 +154,9 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
                         </tr>
                         <tr>
 							<td width="27%" height="25" align="right" valign="middle" bgcolor="#8C8C8C"><span class="TextPlanBlanc"> Disponible à partir du :</span></td>
-                          <td width="23%" height="25" bgcolor="#8C8C8C"><input name="Date" required type="text" id="Datepicker1" /></td>
+                          <td width="23%" height="25" bgcolor="#8C8C8C"><input name="dateproduction" required type="text" id="Datepicker1" /></td>
 							<td width="18%" height="25" align="right" valign="middle" bgcolor="#8C8C8C"><span class="TextPlanBlanc">Fin de validit&eacute; :</span> </td>
-                          <td width="32%" height="25" bgcolor="#8C8C8C"><input name="DateValid" type="text" id="Datepicker2" /></td>
+                          <td width="32%" height="25" bgcolor="#8C8C8C"><input name="dateperemption" type="text" id="Datepicker2" /></td>
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">

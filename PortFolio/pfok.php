@@ -5,20 +5,18 @@ $mdp='berclem0511';	// bernard Mot de passe (en local : aucun)
 $base='IntranetBE';	//Nom de la base de données
 // On se connecte d'abord a MySQL : 
 $con = mysqli_connect('localhost', 'root', '') or die(mysqli_error($con)); 
-
-
-ini_set( 'default_charset', 'ISO-8859-1' );	
-
+mysqli_select_db($con, 'intranetBE');
+ini_set( 'default_charset', "UTF-8" );	
 /////////////////////////////////////////////////////////////////
 //CONTROLE AVANT CHARGEMENT DES PAGES 
 //LE MEME CODE EST INSERE DANS LA PARTIE PUBLIQUE ET LA PARTIE ADMIN
 //LA PREMIERE PAGE EXECUTEE FAIT LA MISE A JOUR QUOTIDIENNE POUR TOUT LE MONDE
 /////////////////////////////////////////////////////////////////
-	$requete = mysqli_query($con, "SELECT id FROM documents");
+$requete = mysqli_query($con, "SELECT id FROM documents");
 while($data = mysqli_fetch_assoc($requete))
 foreach($data as $NouvID)
 {
-$requete2 = mysqli_query("SELECT * FROM documents WHERE id = $NouvID");
+$requete2 = mysqli_query($con, "SELECT * FROM documents WHERE id = $NouvID");
 while($data2 = mysqli_fetch_assoc($requete2))
 {
 $now = date("Y-n-d");
@@ -29,13 +27,13 @@ $NomFichier = $data2['nomfichier'];
 }
 
 if (strtotime($DateValid) < (strtotime($now)) AND (!empty(strtotime($DateValid)))){
-mysqli_query("UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'")or die(mysqli_error());
+mysqli_query($con, "UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'")or die(mysqli_error());
 }
-if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now)) OR (empty(strtotime($DateValid)))){
-mysqli_query("UPDATE documents SET etatdoc ='on' WHERE id ='$ID'")or die(mysqli_error()); 
+if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now))){
+mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'")or die(mysqli_error()); 
 } 
 if ( (empty($NomFichier)) OR (strtotime($Date)) > (strtotime($now)) ){
-mysqli_query("UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'")or die(mysqli_error()); 
+mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'")or die(mysqli_error()); 
 } 
 }
 ////////////////////////////////////////////////////////////////////////////	
@@ -230,8 +228,8 @@ $NomPosteur = $_POST['posteur'];
 $Date = $_POST['dateproduction'];
 $DateValid = $_POST['dateperemption'];		
 $NomFichier = $_POST['nomfichier'];
-$Version = $_POST['version'];
-$Type = $_POST['type'];
+$Version = $_POST['versiondoc'];
+$Type = $_POST['typedoc'];
 $Service = $_POST['servicedoc'];
 $Titre =  $_POST['titre'];	
 $Destinataires = $_POST['destinataires'];
@@ -264,7 +262,7 @@ if (isset($_GET['modifT'])) // Si on demande de modifier
 {
 $modifT = $_GET['modifT'];  
 $don1 = "SELECT * FROM documents WHERE id='$modifT'"; 
-$rep1 = mysqli_query($don1)or die(mysqli_error());
+$rep1 = mysqli_query($con, $don1);
 while ($donall = mysqli_fetch_array($rep1)){ 
 
 $ID = $donall['id'] ;	
@@ -272,8 +270,8 @@ $modif_NomPosteur = $donall['posteur'];
 $modif_Date = $donall['dateproduction'];
 $modif_DateValid = $donall['dateperemption'];
 $modif_NomFichier = $donall['nomfichier'];
-$modif_Version = $donall['version'];	
-$modif_Type = $donall['type'];
+$modif_Version = $donall['versiondoc'];	
+$modif_Type = $donall['typedoc'];
 $modif_Service = $donall['servicedoc'];
 
 $sansBRTitre = str_replace("<br />", "\n", $donall['titre']);
@@ -355,10 +353,10 @@ $modif_Etat = $donall['etatdoc'];
                   </span></div></td>
                 </tr>
                 <tr>
-                  <td width="27%" height="76" align="right" valign="middle" bgcolor="#2B2B2B" style="color: #FFFFFF"><span class="TextPlanBlanc"> Disponible à partir du :</span></td>
-                  <td width="23%" height="76" bgcolor="#2B2B2B" style="color: #FFFFFF"><input name="DateM" required type="text" id="Datepicker1"  value="<?php echo $modif_Date ; ?>"/></td>
-                  <td width="18%" height="76" align="right" valign="middle" bgcolor="#2B2B2B" style="color: #FFFFFF"><span class="TextPlanBlanc">Fin de validité :</span></td>
-                  <td width="32%" height="76" bgcolor="#2B2B2B" style="color: #FFFFFF"><input name="DateValidM" type="text" id="Datepicker2"  value="<?php echo $modif_DateValid ; ?>"/></td>
+                  <td width="27%" height="40" align="right" valign="middle" bgcolor="#2B2B2B" style="color: #FFFFFF"><span class="TextPlanBlanc"> Disponible à partir du :</span></td>
+                  <td width="23%" height="40" bgcolor="#2B2B2B" style="color: #FFFFFF"><input name="DateM" required type="text" id="Datepicker1"  value="<?php echo $modif_Date ; ?>"/></td>
+                  <td width="18%" height="40" align="right" valign="middle" bgcolor="#2B2B2B" style="color: #FFFFFF"><span class="TextPlanBlanc">Fin de validité :</span></td>
+                  <td width="32%" height="40" bgcolor="#2B2B2B" style="color: #FFFFFF"><input name="DateValidM" type="text" id="Datepicker2"  value="<?php echo $modif_DateValid ; ?>"/></td>
                 </tr>
                 <tr>
                   <td height="40" colspan="4" bgcolor="#000000" style="color: #FFFFFF"><div align="center">
@@ -374,7 +372,7 @@ $modif_Etat = $donall['etatdoc'];
             <br>
 <?php 
 $req = "SELECT COUNT(*) AS total FROM documents WHERE etatdoc='on'"; 
-$reponse2 = mysqli_query($req)or die(mysqli_error());
+$reponse2 = mysqli_query($con, $req)or die(mysqli_error());
 while ($donnees2 = mysqli_fetch_assoc($reponse2))
 {
 $Etat2 = $donnees2['total'];	
@@ -403,7 +401,7 @@ if ($Etat2 == 0){} else { ?>
 </table>
 	            <?php 
 $req = "SELECT * FROM documents WHERE etatdoc='on' ORDER BY nomfichier"; 
-$reponse = mysqli_query($req)or die(mysqli_error());
+$reponse = mysqli_query($con, $req)or die(mysqli_error());
 while ($donnees = mysqli_fetch_array($reponse))
 {
 $ID = $donnees['id'];
@@ -414,7 +412,7 @@ $MaDateJour = date('Y-m-d', strtotime($DateJour)) ;
 $MaDateValid = date('Y-m-d', strtotime($DateValid)) ;
 if ($MaDateValid == "1970-01-01"){ $MaDateValid = "Non précisée" ; }    
 $NomFichier = $donnees['nomfichier'];
-$Version = " - v".$donnees['version'];
+$Version = " - v".$donnees['versiondoc'];
 $Type = $donnees['typedoc'];
 $Service = $donnees['servicedoc'];
 $Titre =  $donnees['titre'];	

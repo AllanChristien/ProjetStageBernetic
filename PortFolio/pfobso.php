@@ -6,7 +6,7 @@ $base='IntranetBE';	//Nom de la base de données
 // On se connecte d'abord a MySQL : 
 $con = mysqli_connect('localhost', 'root', '') or die(mysqli_error($con)); 
 mysqli_select_db($con, 'intranetBE');
-ini_set( 'default_charset', 'ISO-8859-1' );	
+ini_set( 'default_charset', "UTF-8" );
 
 /////////////////////////////////////////////////////////////////
 //CONTROLE AVANT CHARGEMENT DES PAGES 
@@ -34,16 +34,19 @@ $ID = $data2['id'] ;
 $NomFichier = $data2['nomfichier']; 
 }
 
-if (strtotime($DateValid) < (strtotime($now)) AND (!empty(strtotime($DateValid)))){
-mysqli_query("UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'")or die(mysqli_error());
+if (strtotime($DateValid) < (strtotime($now))){
+mysqli_query($con, "UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'");
 }
-if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now)) OR (empty(strtotime($DateValid)))){
+if ((empty($DateValid))){
+mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'")or die(mysqli_error()); 
+}
+if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now))){
 mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'")or die(mysqli_error()); 
 } 
 if ( (empty($NomFichier)) OR (strtotime($Date)) > (strtotime($now)) ){
-mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'"); 
+mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'")or die(mysqli_error()); 
 } 
-}
+} 
 ////////////////////////////////////////////////////////////////////////////	
 ////////////////////////////////////////////////////////////////////////////	
 // FIN DE LA ZONE DE CONTROLE AVANT CHARGEMENT DES PAGES
@@ -83,7 +86,7 @@ $ID = $_GET['supprimer'];
 if (isset($_GET['supprimer'])) // Si on demande de supprimer un message 
 { 
 //Pour effacer limage
-mysqli_query('DELETE FROM documents WHERE id=' . $_GET['supprimer'])or die(mysqli_error());
+mysqli_query($con, 'DELETE FROM documents WHERE id=' . $_GET['supprimer']);
 
 $dossier_traite="../../../Tpfolio/";
 $fichier_traite="../../../Tpfolio/".$FichierASupp."";    
@@ -257,11 +260,8 @@ mysqli_query("INSERT INTO portfolio VALUES('', '$NomPosteur', '$Date', '$DateVal
        </tr>
       <tr>
         <td height="60" colspan="2" align="center" valign="middle" >
-			<br>
-     
-
-            
-           
+			<br>                
+			
 <?php
 /////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////AFFICHAGE DE LA FENETRE DE MODIFICATION D'UN DOCUMENT 
@@ -271,23 +271,23 @@ mysqli_query("INSERT INTO portfolio VALUES('', '$NomPosteur', '$Date', '$DateVal
 if (isset($_GET['modifT'])) // Si on demande de modifier 
 {
 $modifT = $_GET['modifT'];  
-$don1 = "SELECT * FROM documen ts WHERE id='$modifT'"; 
-$rep1 = mysqli_query($don1)or die(mysqli_error());
+$don1 = "SELECT * FROM documents WHERE id='$modifT'"; 
+$rep1 = mysqli_query($con, $don1);
 while ($donall = mysqli_fetch_array($rep1)){ 
 
-$ID = $donall['ID'] ;	
-$modif_NomPosteur = $donall['NomPosteur'];
-$modif_Date = $donall['Date'];
-$modif_DateValid = $donall['DateValid'];
-$modif_NomFichier = $donall['NomFichier'];
-$modif_Version = $donall['Version'];	
-$modif_Type = $donall['Type'];
-$modif_Service = $donall['Service'];
+$ID = $donall['id'] ;	
+$modif_NomPosteur = $donall['posteur'];
+$modif_Date = $donall['dateproduction'];
+$modif_DateValid = $donall['dateperemption'];
+$modif_NomFichier = $donall['nomfichier'];
+$modif_Version = $donall['versiondoc'];	
+$modif_Type = $donall['typedoc'];
+$modif_Service = $donall['servicedoc'];
 
-$sansBRTitre = str_replace("<br />", "\n", $donall['Titre']);
+$sansBRTitre = str_replace("<br />", "\n", $donall['titre']);
 $modif_Titre = stripslashes($sansBRTitre);
 	
-$modif_Destinataires = $donall['Destinataires'];
+$modif_Destinataires = $donall['destinataires'];
 if ($modif_Destinataires == 1){ $modif_NomDestinataires = "Bernetic seulement"; }	
 else if ($modif_Destinataires == 2){ $modif_NomDestinataires = "Bernetic + Commerciaux"; }
 else if ($modif_Destinataires == 3){ $modif_NomDestinataires = "Bernetic + Commerciaux + Clients"; }
@@ -397,11 +397,11 @@ if ($Etat1 == 0){} else {
                 </tr>
                 <tr>
                   	             <td width="78" height="30" align="center" valign="middle" bgcolor="#BBB8B8"><span class="TextPlanNoir1">Num&eacute;ro du document</span><br /></td>
-                    <td width="172" height="30"  align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Cr&eacute;&eacute; par</td>
-                    <td width="501" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Titre du document</td>
-                    <td width="91" height="30" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Type</td>
-                    <td width="75" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Rubrique</td>
-                    <td width="38" height="30" align="center" valign="middle" bgcolor="#BBB8B8">&nbsp;</td>
+                    <td width="156" height="30"  align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Cr&eacute;&eacute; par</td>
+                    <td width="366" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Titre du document</td>
+                    <td width="187" height="30" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Type</td>
+                    <td width="85" align="center" valign="middle" bgcolor="#BBB8B8" class="TextPlanNoir1">Rubrique</td>
+                    <td width="103" height="30" align="center" valign="middle" bgcolor="#BBB8B8"><span class="TextPlanNoir1">Suppression</span></td>
                 </tr>
               </table>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -413,7 +413,7 @@ if ($Etat1 == 0){} else {
 </table>
                 <?php 
 $req = "SELECT * FROM documents WHERE etatdoc='depass'"; 
-$reponse = mysqli_query($req)or die(mysqli_error());
+$reponse = mysqli_query($con, $req);
 while ($donnees = mysqli_fetch_array($reponse))
 {
 $ID = $donnees['id'];
@@ -424,7 +424,7 @@ $MaDateJour = date('Y-m-d', strtotime($DateJour)) ;
 $MaDateValid = date('Y-m-d', strtotime($DateValid)) ;
 if ($MaDateValid == "1970-01-01"){ $MaDateValid = "Non précisée" ; }    
 $NomFichier = $donnees['nomfichier'];
-$Version = " - v".$donnees['version'];
+$Version = " - v".$donnees['versiondoc'];
 $Type = $donnees['typedoc'];
 $Service = $donnees['servicedoc'];
 $Titre =  $donnees['titre'];	
@@ -433,9 +433,9 @@ $Etat = $donnees['etatdoc'];
 ?>
                 <table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="3" cellpadding="0">
 					   <tr>
-                      <td width="77" align="center" valign="middle" bgcolor="#8C8C8C" class="soustitrenoir"><?php echo $ID ;?><br /></td>
-                      <td width="175"  align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $NomPosteur ; ?></td>
-                      <td width="436" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanNoir1"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <td width="80" align="center" valign="middle" bgcolor="#8C8C8C" class="soustitrenoir"><?php echo $ID ;?><br /></td>
+                      <td width="155"  align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $NomPosteur ; ?></td>
+                      <td width="369" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanNoir1"><table width="100%" border="0" cellpadding="0" cellspacing="0">
                           <tbody>
                             <tr>
                               <td class="soustitrenoir"><?php if (!empty($NomFichier)){ echo "<a href='../../../Tpfolio/$NomFichier'  target='_blank' class='blanc2'>".$Titre."</a>" ;   } else { echo $Titre ; } ?></td>
@@ -445,12 +445,12 @@ $Etat = $donnees['etatdoc'];
                             </tr>
                           </tbody>
                       </table></td>
-                      <td width="70" align="center" valign="middle" class="TextPlanBlanc">
+                      <td width="79" align="center" valign="middle" class="TextPlanBlanc">
                      <input type="button" value="Modifier" onclick="window.location.href='<?php echo 'pfobso.php?modifT='.$ID.'' ; ?>';">  
 					  </td>
-                      <td width="89" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $Type;?></td>
-                      <td width="76" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $Service;?></td>
-                      <td width="37" align="center" valign="middle" bgcolor="#8C8C8C"><a href="<?php echo 'pfobso.php?supprimer=' . $ID . '&amp;Fichier='.$NomFichier.''; ?>" onclick="return confirm_del()"><img src="supproff.png" alt="supprimer" name="suprimer" width="25" height="25" border="0" id="suprimer" /></a></td>
+                      <td width="100" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $Type;?></td>
+                      <td width="88" align="center" valign="middle" bgcolor="#8C8C8C" class="TextPlanBlanc"><?php echo $Service;?></td>
+                      <td width="101" align="center" valign="middle" bgcolor="#8C8C8C"><a href="<?php echo 'pfobso.php?supprimer=' . $ID . '&amp;Fichier='.$NomFichier.''; ?>" onclick="return confirm_del()"><img src="supproff.png" alt="supprimer" name="suprimer" width="25" height="25" border="0" id="suprimer" /></a></td>
                     </tr>
                 </table><table width="100%" border="0" cellpadding="0" cellspacing="0">
   <tbody>

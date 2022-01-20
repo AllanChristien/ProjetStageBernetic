@@ -10,8 +10,7 @@
 $con = mysqli_connect('localhost', 'root', '') or die(mysqli_error($con)); 
 mysqli_select_db($con, 'intranetBE');
 include ("recherche.php") ;
-ini_set( 'default_charset', 'ISO-8859-1' );	
-
+ini_set( 'default_charset', "UTF-8" );
     ?>
 	
 	
@@ -25,19 +24,21 @@ ini_set( 'default_charset', 'ISO-8859-1' );
 	          </tr>
 			</tbody>
 	</table>
-<span class="petittitre"> Portfolio </span><br>
+<p>&nbsp;</p>
+<p><span class="petittitre">Portfolio </span><br>
   <br>
   <br>
-  <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-    <tbody>
+</p>
+<table width="961" height="524" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tbody>
       <tr>
-        <td align="center" valign="middle"><br>
+        <td height="524" align="center" valign="middle"><br>
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tbody>
               <tr>
-                <td width="19%" align="center" valign="middle"><span class="soustitre">Quel service :</span></td>
+                <td width="24%" align="center" valign="middle"><span class="soustitre">Quel service :</span></td>
                 <td width="43%" align="center" valign="middle" class="soustitre">Type de document :</td>
-                <td width="38%" align="center" valign="middle" class="soustitre">Recherche par mot clé:</td>
+                <td width="33%" align="center" valign="middle" class="soustitre">Recherche par mot clé:</td>
               </tr>
               <tr>
                 <td align="center" valign="middle"> <?php
@@ -50,14 +51,9 @@ $TriType = $_SESSION['TriType'] ;
                    
 if (empty($_POST['TriMots'])) { $_SESSION['TriMots'] = "aucun" ; } else { $_SESSION['TriMots'] = $_POST['TriMots'];}
 $TriMots = $_SESSION['TriMots'] ;                     
-                    ?>                    
-                   <?php
-echo $TriMots ;
-                    //REQUETES POUR LES TRIS
-?>
-                    
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ; ?>">
-<select name="TriService" id="TriService" title="TriService" onchange="submit()">
+                    ?>
+                  <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ; ?>">
+  <select name="TriService" id="TriService" title="TriService" onchange="submit()">
 <option value ="tous">Tout les services</option>
 
 <?php   
@@ -117,10 +113,7 @@ $MonTypeTri2 = $donneesTriTyp2['typedoc'];
               </tr>
             </tbody>
           </table>
-          
-
-     
-            <?php
+          <?php
         
 /////////////////
 ///////////////// SI AUCUN TRI ON  AFFICHE TOUT LES SERVICES
@@ -136,7 +129,7 @@ $MaRubrique = $data['servicedoc'];
       <br>
  <table width="100%" border="0" bordercolor="#D97900" cellspacing="3" cellpadding="0">
  <tr>
- <td width="2%" height="39" align="left" valign="bottom" bgcolor="#008EF7"><img src="fleche.png" alt="fleche"/></td>
+ <td width="2%" height="44" align="left" valign="bottom" bgcolor="#008EF7"><img src="fleche.png" alt="fleche"/></td>
  <td width="98%" align="left" valign="middle" bgcolor="#008EF7"><span class="NoCmd">&nbsp;<?php echo $MaRubrique ; ?></span></td>
  </tr>
  </table>
@@ -172,12 +165,12 @@ if ($Destinataires == '3') { $Destinataires = "<img src='Dest3.png' width='25' h
 ?>      
   <table width="100%" border="0" cellpadding="0" cellspacing="3" bordercolor="#FFFFFF">
     <tr>
-        <td width="72" height="30" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $ID ;?></td>
-        <td width="427" align="center" valign="middle" bgcolor="#545454" class="TextPlanNoir1"><?php if (!empty($NomFichier)){ echo "<a href='../../Tpfolio/$NomFichier'  target='_blank' class='blanc3'>".$Titre."</a>" ;   } else { echo $Titre ; } ?>
+        <td width="69" height="30" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $ID ;?></td>
+        <td width="409" align="center" valign="middle" bgcolor="#545454" class="TextPlanNoir1"><?php if (!empty($NomFichier)){ echo "<a href='../../Tpfolio/$NomFichier'  target='_blank' class='blanc3'>".$Titre."</a>" ;   } else { echo $Titre ; } ?>
           
         </td>
-        <td width="283" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $Type;?></td>
-        <td width="203" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $Destinataires;?></td>
+        <td width="268" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $Type;?></td>
+        <td width="200" align="center" valign="middle" bgcolor="#545454" class="TextPlanBlanc"><?php echo $Destinataires;?></td>
         </tr>
   </table>    
              
@@ -210,7 +203,7 @@ if ($MonTypeTri != 'tous') { $where = "WHERE servicedoc = '$MonServiceTri' AND t
       <td width="74" height="30" align="center" valign="middle" bgcolor="#00BDD4"><span class="TextPlanNoir1">Doc N&deg;</span><br /></td>
       <td width="426" align="center" valign="middle" bgcolor="#00BDD4" class="TextPlanNoir1">Titre du document</td>
       <td width="284" height="30" align="center" valign="middle" bgcolor="#00BDD4" class="TextPlanNoir1">Type</td>
-      <td width="201" align="center" valign="middle" bgcolor="#00BDD4" class="TextPlanNoir1">Dest</td>
+      <td width="201" align="center" valign="middle" bgcolor="#00BDD4" class="TextPlanNoir1">Destinataires</td>
       </tr>
   </table>
 <?php             

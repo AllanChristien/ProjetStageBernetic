@@ -8,7 +8,7 @@ $con = mysqli_connect('localhost', 'root', '') or die(mysqli_error($con));
 
 mysqli_select_db($con, 'intranetBE');
 
-ini_set( 'default_charset', 'ISO-8859-1' );	
+ini_set( 'default_charset', "UTF-8" );
 
 /////////////////////////////////////////////////////////////////
 //CONTROLE AVANT CHARGEMENT DES PAGES 
@@ -28,15 +28,14 @@ $Date = $data2['dateproduction'] ;
 $ID = $data2['id'] ;	
 $NomFichier = $data2['nomfichier']; 
 }
-
-if (strtotime($DateValid) < (strtotime($now)) AND (!empty(strtotime($DateValid)))){
-mysqli_query($con, "UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'");
 }
-if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now)) AND (strtotime($DateValid)) > (strtotime($now)) OR (empty(strtotime($DateValid)))){
-mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'"); 
-} 
+if (strtotime($DateValid) < (strtotime($now)) AND (!empty(strtotime($DateValid)))){
+mysqli_query($con, "UPDATE documents SET etatdoc ='depass' WHERE id ='$ID'"); //Si la date de production est inférieure a date aujourd'hui, etat du doc passé a depass
+}
+if ((!empty($NomFichier)) AND (strtotime($Date)) <= (strtotime($now))){
+mysqli_query($con, "UPDATE documents SET etatdoc ='on' WHERE id ='$ID'");//Si la date de production est inferieure ou egale a date aujourd'hui etat du doc passé a on
 if ( (empty($NomFichier)) OR (strtotime($Date)) > (strtotime($now)) ){
-mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'"); 
+mysqli_query($con, "UPDATE documents SET etatdoc ='wait' WHERE id ='$ID'");//Si la date de production est supérieure a date aujourd'hui, etat du doc passé a wait
 } 
 }
 ////////////////////////////////////////////////////////////////////////////	
@@ -71,14 +70,14 @@ var agree=confirm("Cette operation est irreversible. Etes-vous certain de vouloi
 </head>
 <?php
 	
-$FichierASupp = $_GET['fichier'] ;
-$ID = $_GET['supprimer']; 	
+$FichierASupp = $_GET['Fichier'] ;
+$ID = $_GET['Supprimer']; 	
 	
 	// On supprime une ligne
-if (isset($_GET['supprimer'])) // Si on demande de supprimer un message 
+if (isset($_GET['Supprimer'])) // Si on demande de supprimer un message 
 { 
 //Pour effacer limage
-mysqli_query('DELETE FROM documents WHERE id=' . $_GET['supprimer'])or die(mysqli_error());
+mysqli_query($con, 'DELETE FROM documents WHERE id=' . $_GET['Supprimer'])or die(mysqli_error());
 
 $dossier_traite="../../../Tpfolio/";
 $fichier_traite="../../../Tpfolio/".$FichierASupp."";    
@@ -137,7 +136,7 @@ if (empty($NomFichierM) AND (empty($MonAncienFichierM))) { ?>
 <?php } else if (empty($NomFichierM) AND (!empty($MonAncienFichierM))) {
 
 // SI IL Y A PAS DE FICHIER A POSTER MAIS QU'UN FICHIER EST DEJA PRESENT POUR CET ID...
-mysqli_query("UPDATE documents SET posteur='$NomPosteurM', datecreation='$DateM', dateperemption='$DateValidM', version='$VersionM', typedoc='$TypeM', servicedoc='$ServiceM', titre='$TitreM', destinataires='$DestinatairesM', etatdoc='$etat' WHERE id='$IDM'") or die(mysqli_error());
+mysqli_query("UPDATE documents SET posteur='$NomPosteurM', datecreation='$DateM', dateperemption='$DateValidM', versiondoc='$VersionM', typedoc='$TypeM', servicedoc='$ServiceM', titre='$TitreM', destinataires='$DestinatairesM', etatdoc='$etat' WHERE id='$IDM'") or die(mysqli_error());
 ?><script type="text/JavaScript">
 <!--
 function redirection(page)
@@ -188,7 +187,7 @@ $Now = date("dmy");
 			  'Upload effectué avec succès !';
 	 
 		 		// Alors on modifie l'actu correspondante 
-mysqli_query("UPDATE documents SET posteur='$NomPosteurM', datecreation='$DateM', dateperemption='$DateValidM', nomfichier='$fichier', version='$VersionM', typedoc='$TypeM', servicedoc='$ServiceM', titre='$TitreM', destinataires='$DestinatairesM', etatdoc='$etat' WHERE id='$IDM'") or die(mysqli_error());
+mysqli_query("UPDATE documents SET posteur='$NomPosteurM', datecreation='$DateM', dateperemption='$DateValidM', nomfichier='$fichier', versiondoc='$VersionM', typedoc='$TypeM', servicedoc='$ServiceM', titre='$TitreM', destinataires='$DestinatairesM', etatdoc='$etat' WHERE id='$IDM'") or die(mysqli_error());
  
 ?><script type="text/JavaScript">
 <!--
@@ -266,19 +265,19 @@ if (isset($_GET['modifT'])) // Si on demande de modifier
 {
 $modifT = $_GET['modifT'];  
 $don1 = "SELECT * FROM documents WHERE id='$modifT'"; 
-$rep1 = mysqli_query($don1)or die(mysqli_error());
+$rep1 = mysqli_query($con, $don1);
 while ($donall = mysqli_fetch_array($rep1)){ 
 
 $ID = $donall['id'] ;	
 $modif_NomPosteur = $donall['posteur'];
-$modif_Date = $donall['datecreation'];
+$modif_Date = $donall['dateproduction'];
 $modif_DateValid = $donall['dateperemption'];
 $modif_NomFichier = $donall['nomfichier'];
-$modif_Version = $donall['version'];	
+$modif_Version = $donall['versiondoc'];	
 $modif_Type = $donall['typedoc'];
 $modif_Service = $donall['servicedoc'];
 
-$sansBRTitre = str_replace("<br />", "\n", $donall['Titre']);
+$sansBRTitre = str_replace("<br />", "\n", $donall['titre']);
 $modif_Titre = stripslashes($sansBRTitre);
 	
 $modif_Destinataires = $donall['destinataires'];
@@ -397,12 +396,12 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                              <input name="Titre" type="text" id="Titre" value="Titre" size="60" maxlength="90" />
+                              <input name="titre" type="text" id="titre" value="titre" size="60" maxlength="90" />
                           </div></td>
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                            <select name="Type" id="Type">
+                            <select name="typedoc" id="typedoc">
                             <option selected="selected">Type de document</option>
                             <option value="Procedure">Procedure</option>
                             <option value="Charte">Charte</option>
@@ -412,7 +411,7 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
                         </tr>
                         <tr>
                           <td height="25" colspan="4" bgcolor="#8C8C8C"><div align="center">
-                            <select name="service" id="service">
+                            <select name="servicedoc" id="servicedoc">
                             <option selected="selected">Service</option>
                             <option value="ADV">ADV</option>
                             <option value="Marketing">Marketing</option>
@@ -448,11 +447,11 @@ if (isset($_GET['ajouter'])) // Si on demande d ajouter une news
       </table>
       <br><br><br>
 			<?php 
-$req = "SELECT COUNT(*) AS Total FROM documents WHERE etatdoc='wait'"; 
+$req = "SELECT COUNT(*) AS total FROM documents WHERE etatdoc='wait'"; 
 $reponse0 = mysqli_query($con, $req);
 while ($donnees0 = mysqli_fetch_assoc($reponse0))
 {
-$Etat = $donnees0['Total'];	
+$Etat = $donnees0['total'];	
 if ($Etat == 0){} else {
 			?>
 			<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" class="fondtransp1">
